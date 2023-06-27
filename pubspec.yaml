@@ -11,6 +11,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  # request
+  http:
+  
+  # onboarding
+  introduction_screen:
 
 
   cupertino_icons: ^1.0.2
@@ -27,6 +33,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/onboarding_1.jpg
 
   # fonts:
   #   - family: Schyler

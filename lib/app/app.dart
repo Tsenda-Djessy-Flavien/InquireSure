@@ -1,4 +1,4 @@
-import 'package:analyse_gp/presentation/page/home_screen.dart';
+import 'package:analyse_gp/presentation/onboarding.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -10,7 +10,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(useMaterial3: true),
       title: "InquireSure",
-      home: const HomeScreen(),
+      home: const OnBoarding(),
     );
   }
 }
