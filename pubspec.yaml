@@ -40,7 +40,7 @@ flutter:
     - assets/images/onboarding_2.jpg
     - assets/images/logo_app.png 
     - assets/images/orange_logo.png
-    - assets/images/orange_logo_small.png
+    - assets/images/orange_logo_1.png
 
   # fonts:
   #   - family: Schyler

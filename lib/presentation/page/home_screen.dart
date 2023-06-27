@@ -34,18 +34,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   children: [
                     Image.asset(
-                      KgpLogo,
-                      width: 60,
-                      height: 60,
+                      KorangeLogo,
+                      width: 40,
+                      height: 40,
                     ),
-                    const SizedBox(width: 5),
-                    Text(
-                      APP_NAME.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 22,
-                        color: appOrangeColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    const SizedBox(width: 10),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          APP_NAME.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: appSectionBackground,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: const [
+                            Text(
+                              Kby,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: appSectionBackground,
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              KorangeCyber,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: appOrangeColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -64,78 +93,84 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              const Text(KintoText, textAlign: TextAlign.center),
+              // LogoApp
+              Center(child: Image.asset(KLogoApp)),
               const SizedBox(height: 20),
+              // IntoText
+              const Text(KintoText, textAlign: TextAlign.center),
+              const SizedBox(height: 30),
               // inputTextarea
               TextField(
                 maxLines: 5,
                 decoration: const InputDecoration(
                   hintText: KcheckContent,
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                    borderSide: BorderSide(color: appBlackColor, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.zero),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: appColorPrimary, width: 1.0),
+                    borderSide: BorderSide(color: appBlackColor, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.zero),
                   ),
                 ),
                 onChanged: (value) {},
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               // checkButton
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CheckButton(onTap: () {}, checkContent: KcheckButtonText),
-                ],
+              Center(
+                child: CheckButton(
+                  onTap: () {},
+                  checkContent: KcheckButtonText,
+                ),
               ),
               const SizedBox(height: 20),
               // results analyses
-              SizedBox(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // maliciousStatus & analysisStatus
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        CheckMalicious(maliciousStatus: '0'),
-                        SizedBox(height: 10),
-                        CheckStatus(analysisStatus: 'Bonne'),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(KresultText),
-                    // engineName & engineResult
-                    const SizedBox(height: 10),
-                    const CheckCard(
-                      engineName: 'Abusix',
-                      engineResult: 'Clean',
-                    ),
-                    const SizedBox(height: 5),
-                    const CheckCard(
-                      engineName: 'Abusix',
-                      engineResult: 'Clean',
-                    ),
-                    const SizedBox(height: 5),
-                    const CheckCard(
-                      engineName: 'Abusix',
-                      engineResult: 'Clean',
-                    ),
-                    const SizedBox(height: 5),
-                    const CheckCard(
-                      engineName: 'Abusix',
-                      engineResult: 'Clean',
-                    ),
-                    const SizedBox(height: 5),
-                    const CheckCard(
-                      engineName: 'Abusix',
-                      engineResult: 'Clean',
-                    ),
-                  ],
-                ),
-              ),
+              // SizedBox(
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       // maliciousStatus & analysisStatus
+              //       Column(
+              //         mainAxisAlignment: MainAxisAlignment.start,
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: const [
+              //           CheckMalicious(maliciousStatus: '0'),
+              //           SizedBox(height: 10),
+              //           CheckStatus(analysisStatus: 'Bonne'),
+              //         ],
+              //       ),
+              //       const SizedBox(height: 10),
+              //       const Text(KresultText),
+              //       // engineName & engineResult
+              //       const SizedBox(height: 10),
+              //       const CheckCard(
+              //         engineName: 'Abusix',
+              //         engineResult: 'Clean',
+              //       ),
+              //       const SizedBox(height: 5),
+              //       const CheckCard(
+              //         engineName: 'Abusix',
+              //         engineResult: 'Clean',
+              //       ),
+              //       const SizedBox(height: 5),
+              //       const CheckCard(
+              //         engineName: 'Abusix',
+              //         engineResult: 'Clean',
+              //       ),
+              //       const SizedBox(height: 5),
+              //       const CheckCard(
+              //         engineName: 'Abusix',
+              //         engineResult: 'Clean',
+              //       ),
+              //       const SizedBox(height: 5),
+              //       const CheckCard(
+              //         engineName: 'Abusix',
+              //         engineResult: 'Clean',
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

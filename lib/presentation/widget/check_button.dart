@@ -18,12 +18,12 @@ class CheckButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
         backgroundColor: appOrangeColor,
         foregroundColor: appLayoutBackground,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       onPressed: onTap,
       child: Text(
         checkContent.toUpperCase(),
-        style: const TextStyle(fontSize: 16),
+        style: const TextStyle(fontSize: 16, color: appBlackColor),
         textAlign: TextAlign.center,
       ),
     );

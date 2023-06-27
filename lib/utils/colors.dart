@@ -23,8 +23,8 @@ const dividerColor = Color(0xFFF1F1F1);
 
 // appBar Gradient Color
 List<Color> KappBarGradientColor = const [
-  appLayoutBackground,
-  appLayoutBackground,
+  appBlackColor,
+  appBlackColor,
 ];
 
 // body Gradient Color
