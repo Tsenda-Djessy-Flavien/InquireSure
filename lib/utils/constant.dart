@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
+import 'package:analyse_gp/utils/images.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -9,24 +10,31 @@ const KcheckContent = "Veuillez saisir votre texte";
 
 const KcheckButtonText = 'verification';
 
+const Konboarding_title = '';
+
 const KresultText = "Résultats d'analyse des fournisseurs de sécurité";
+
+const Konboarding_title_2 = "Mettez fin à vos doutes";
+
+const Konboarding_main_2 =
+    "Instead of having to buy an entire share, invest any amount you want.";
 
 List<PageViewModel> KonBoardingPages = [
   PageViewModel(
-    title: '',
+    title: Konboarding_title,
     bodyWidget: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           const SizedBox(height: 50),
           Image.asset(
-            'assets/images/onboarding_2.jpg',
+            Konboarding_2,
             width: 280,
             height: 280,
           ),
           const SizedBox(height: 50),
           const Text(
-            "Mettez fin à vos doutes",
+            Konboarding_title_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 28.0,
@@ -35,7 +43,7 @@ List<PageViewModel> KonBoardingPages = [
           ),
           const SizedBox(height: 50),
           const Text(
-            "Instead of having to buy an entire share, invest any amount you want.",
+            Konboarding_main_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18.0,
@@ -46,20 +54,20 @@ List<PageViewModel> KonBoardingPages = [
     ),
   ),
   PageViewModel(
-    title: '',
+    title: Konboarding_title,
     bodyWidget: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           const SizedBox(height: 50),
           Image.asset(
-            'assets/images/onboarding_2.jpg',
+            Konboarding_2,
             width: 280,
             height: 280,
           ),
           const SizedBox(height: 50),
           const Text(
-            "Mettez fin à vos doutes",
+            Konboarding_title_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 28.0,
@@ -68,7 +76,7 @@ List<PageViewModel> KonBoardingPages = [
           ),
           const SizedBox(height: 50),
           const Text(
-            "Instead of having to buy an entire share, invest any amount you want.",
+            Konboarding_main_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18.0,
@@ -79,20 +87,20 @@ List<PageViewModel> KonBoardingPages = [
     ),
   ),
   PageViewModel(
-    title: '',
+    title: Konboarding_title,
     bodyWidget: Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
           const SizedBox(height: 50),
           Image.asset(
-            'assets/images/onboarding_2.jpg',
+            Konboarding_2,
             width: 280,
             height: 280,
           ),
           const SizedBox(height: 50),
           const Text(
-            "Mettez fin à vos doutes",
+            Konboarding_title_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 28.0,
@@ -101,7 +109,7 @@ List<PageViewModel> KonBoardingPages = [
           ),
           const SizedBox(height: 50),
           const Text(
-            "Instead of having to buy an entire share, invest any amount you want.",
+            Konboarding_main_2,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18.0,

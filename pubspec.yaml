@@ -18,6 +18,9 @@ dependencies:
   # onboarding
   introduction_screen:
 
+  # splash screen
+  animated_splash_screen:
+
 
   cupertino_icons: ^1.0.2
 
@@ -34,6 +37,10 @@ flutter:
   assets:
     - assets/images/
     - assets/images/onboarding_1.jpg
+    - assets/images/onboarding_2.jpg
+    - assets/images/logo_app.png 
+    - assets/images/orange_logo.png
+    - assets/images/orange_logo_small.png
 
   # fonts:
   #   - family: Schyler
