@@ -16,9 +16,8 @@ class CheckCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: appOrangeColor.withOpacity(0.3),
-        borderRadius: BorderRadius.circular(4.0),
-        border: Border.all(color: appColorPrimary.withOpacity(0.3)),
+        color: appOrangeColor.withOpacity(0.7),
+        border: Border.all(color: const Color.fromARGB(255, 207, 198, 198)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

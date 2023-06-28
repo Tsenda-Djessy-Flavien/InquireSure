@@ -2,7 +2,7 @@ import 'package:analyse_gp/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class CheckButton extends StatelessWidget {
-  final VoidCallback onTap;
+  final void Function()? onTap;
   final String checkContent;
 
   const CheckButton({

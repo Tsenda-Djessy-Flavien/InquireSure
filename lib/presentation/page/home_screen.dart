@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:analyse_gp/domain/models/analysis_result_model.dart';
+import 'package:analyse_gp/network/api/key.dart';
 import 'package:analyse_gp/presentation/widget/check_button.dart';
 import 'package:analyse_gp/presentation/widget/check_malicious.dart';
 import 'package:analyse_gp/presentation/widget/check_status.dart';
@@ -8,6 +11,8 @@ import 'package:analyse_gp/utils/config.dart';
 import 'package:analyse_gp/utils/constant.dart';
 import 'package:analyse_gp/utils/images.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +22,159 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _urlController = TextEditingController();
+  bool _isLoading = false;
+  bool _isUrlEmpty = false;
+  bool _isPasteButtonVisible = false;
+  List _result = [];
+
+  @override
+  void dispose() {
+    _urlController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pasteText() async {
+    final clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
+    if (clipboardData != null && clipboardData.text != null) {
+      setState(() {
+        _urlController.text = clipboardData.text!;
+      });
+    }
+  }
+
+  String extractUrl(String text) {
+    final regex = RegExp(
+      r"(?:(?:https?|http):\/\/|www\.)[^\s/$.?#].[^\s]*",
+      caseSensitive: false,
+    );
+    final match = regex.firstMatch(text);
+    return match?.group(0) ?? '';
+  }
+
+  Future<Map<String, dynamic>> submitUrl(String url) async {
+    const apiUrl = 'https://www.virustotal.com/api/v3/urls';
+    final headers = {
+      'x-apikey': apiKey,
+      'Content-Type': 'application/json',
+    };
+    final queryParams = {'url': url};
+    final uri = Uri.parse(apiUrl).replace(queryParameters: queryParams);
+
+    final response = await http.post(uri, headers: headers);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data as Map<String, dynamic>;
+    } else {
+      final error = json.decode(response.body)['error'];
+      throw Exception('${error['code']}: ${error['message']}');
+    }
+  }
+
+  Future<Map<String, dynamic>> getFinalResults(String finalResultsUrl) async {
+    final headers = {'x-apikey': apiKey};
+
+    final response =
+        await http.get(Uri.parse(finalResultsUrl), headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final attributes = data['data']?['attributes'];
+      final analysisStatus = attributes?['status'];
+      final maliciousStatus = attributes?['stats']?['malicious'];
+      final engines = attributes?['results'];
+
+      return {
+        'analysisStatus': analysisStatus,
+        'maliciousStatus': maliciousStatus,
+        'engines': engines,
+      };
+    } else {
+      final error = json.decode(response.body)['error'];
+      throw Exception('${error['code']}: ${error['message']}');
+    }
+  }
+
+  Future<List<AnalysisResult>> _checkUrl() async {
+    final url = extractUrl(_urlController.text);
+
+    setState(() {
+      _isUrlEmpty = url.isEmpty;
+    });
+
+    if (_isUrlEmpty) {
+      return [
+        AnalysisResult(
+          analysisStatus: 'Error: URL is empty',
+          maliciousStatus: 0,
+          engines: [],
+        )
+      ];
+    }
+
+    setState(() {
+      _isLoading = true;
+      _result = [];
+    });
+
+    try {
+      final result = await submitUrl(url);
+
+      final analysisResultsUrl = result['data']['links']['self'];
+      final finalResults = await getFinalResults(analysisResultsUrl);
+
+      final analysisStatus = finalResults['analysisStatus'];
+      final maliciousStatus = finalResults['maliciousStatus'];
+      final engines = finalResults['engines'];
+
+      final enginesList = engines?.entries
+              .map((entry) {
+                final engineName = entry.key;
+                final engineResult = entry.value['result'];
+                final convertedEngine = Map<String, String>.from({
+                  'engineName': engineName,
+                  'engineResult': engineResult ?? 'N/A',
+                });
+                return convertedEngine;
+              })
+              .toList()
+              .cast<Map<String, String>>() ??
+          [];
+
+      final List<AnalysisResult> analysisResults = [
+        AnalysisResult(
+          analysisStatus: analysisStatus ?? 'N/A',
+          maliciousStatus: maliciousStatus ?? 0,
+          engines: enginesList,
+        ),
+      ];
+
+      setState(() {
+        _result = analysisResults;
+      });
+
+      return analysisResults;
+    } catch (error) {
+      final List<AnalysisResult> errorResult = [
+        AnalysisResult(
+          analysisStatus: 'Error: $error',
+          maliciousStatus: 0,
+          engines: [],
+        ),
+      ];
+
+      setState(() {
+        _result = errorResult;
+      });
+
+      return errorResult;
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,29 +259,112 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 30),
               // inputTextarea
               TextField(
+                controller: _urlController,
                 maxLines: 5,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: KcheckContent,
-                  enabledBorder: OutlineInputBorder(
+                  enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: appBlackColor, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.zero),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: appBlackColor, width: 1.0),
                     borderRadius: BorderRadius.all(Radius.zero),
                   ),
+                  border: _isUrlEmpty
+                      ? const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                        )
+                      : null,
+                  errorText:
+                      _isUrlEmpty ? 'Votre contenu doit avoir un lien' : null,
                 ),
-                onChanged: (value) {},
+                onChanged: (value) {
+                  setState(() {
+                    _isUrlEmpty = false;
+                    _isPasteButtonVisible = value.isEmpty;
+                  });
+                },
               ),
               const SizedBox(height: 20),
               // checkButton
+              _urlController.text.isNotEmpty
+                  ? Center(
+                      child: CheckButton(
+                        onTap: _isLoading ? null : _checkUrl,
+                        checkContent: KcheckButtonText,
+                      ),
+                    )
+                  : const SizedBox(height: 0),
+              _urlController.text.isEmpty
+                  ? Center(
+                      child: CheckButton(
+                        onTap: _pasteText,
+                        checkContent: 'Coller un Contenu',
+                      ),
+                    )
+                  : const SizedBox(height: 0),
+              const SizedBox(height: 20),
+              // loader
               Center(
-                child: CheckButton(
-                  onTap: () {},
-                  checkContent: KcheckButtonText,
+                child: Visibility(
+                  visible: _isLoading,
+                  child: CircularProgressIndicator(
+                    color: appColorPrimary,
+                    backgroundColor: appColorPrimary.withOpacity(0.1),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
+              Column(
+                children: _result.map((item) {
+                  final analysisStatus = item.analysisStatus;
+                  final maliciousStatus = item.maliciousStatus;
+                  final engines = item.engines;
+
+                  final enginesWidgets = engines.map((engine) {
+                    final engineName = engine['engineName'];
+                    final engineResult = engine['engineResult'];
+                    return CheckCard(
+                      engineName: engineName,
+                      engineResult: engineResult,
+                    );
+                  }).toList();
+
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Analysis Status: $analysisStatus',
+                        style: TextStyle(
+                          color: analysisStatus.startsWith('Error')
+                              ? Colors.red
+                              : Colors.black,
+                        ),
+                      ),
+                      Text(
+                        'Malicious Status: $maliciousStatus/90',
+                        style: TextStyle(
+                          color: analysisStatus.startsWith('Error')
+                              ? Colors.red
+                              : Colors.black,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Résultats d'analyse des fournisseurs de sécurité",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      ...enginesWidgets,
+                      const SizedBox(height: 20),
+                    ],
+                  );
+                }).toList(),
+              ),
               // results analyses
               // SizedBox(
               //   child: Column(
