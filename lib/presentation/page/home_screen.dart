@@ -278,8 +278,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderSide: BorderSide(color: Colors.red),
                         )
                       : null,
-                  errorText:
-                      _isUrlEmpty ? 'Votre contenu doit avoir un lien' : null,
+                  errorText: _isUrlEmpty ? KurlEmpty : null,
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -339,18 +338,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       CheckStatus(analysisStatus: analysisStatus),
                       const SizedBox(height: 5),
-                      CheckMalicious(
-                        maliciousStatus: maliciousStatus.toString(),
-                      ),
+                      analysisStatus != 'queued'
+                          ? CheckMalicious(
+                              maliciousStatus: maliciousStatus.toString(),
+                            )
+                          : const SizedBox(height: 0),
                       const SizedBox(height: 20),
-                      const Text(
-                        KresultText,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
+                      maliciousStatus <= 0 && analysisStatus != 'queued'
+                          ? const Center(
+                              child: Text(
+                                kTrueContenu,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: kCheckIconColor,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(height: 0),
+                      maliciousStatus > 0 && analysisStatus != 'queued'
+                          ? const Center(
+                              child: Text(
+                                kFalseContenu,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: appRedColor,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(height: 0),
+                      const SizedBox(height: 15),
+                      analysisStatus != 'queued'
+                          ? const Text(
+                              KresultText,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : const SizedBox(height: 0),
+                      analysisStatus == 'queued'
+                          ? const Center(
+                              child: Text(
+                                kQueudStatus,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(height: 0),
                       ...enginesWidgets,
                       const SizedBox(height: 20),
                     ],

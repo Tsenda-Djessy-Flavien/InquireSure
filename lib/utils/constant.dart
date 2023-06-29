@@ -8,7 +8,15 @@ const KintoText =
     "Analyser les contenus suspects pour détecter\nles logiciels malveillants et autres violations, et les partager automatiquement avec la communauté de la sécurité.";
 const KcheckContent = "Veuillez saisir votre texte";
 
+const KurlEmpty = 'Votre contenu doit avoir un lien';
+
 const KcheckButtonText = 'verification';
+
+const kTrueContenu = '"Ce contenu semble être digne de confiance"';
+
+const kFalseContenu = '"Ce contenu ne semble pas être digne de confiance"';
+
+const kQueudStatus = 'Veillez soumettre à nouveau votre vérification !';
 
 const Konboarding_title = '';
 
