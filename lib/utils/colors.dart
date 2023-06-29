@@ -8,9 +8,12 @@ const appOrangeColor = Color(0xFFff6900);
 const appBlackColor = Colors.black;
 const blueTickColor = Colors.orange;
 
+const appRedColor = Colors.red;
+
 const kBlackOrgColor = Color.fromARGB(255, 121, 56, 10);
 
-const kCheckIconColor = Color.fromARGB(255, 103, 208, 106);
+const kCheckIconColor =
+    Color.fromARGB(255, 32, 218, 38); //  Color.fromARGB(255, 103, 208, 106);
 
 //Section BG / page BG
 const appLayoutBackground = Color(0xFFF8F9FA);

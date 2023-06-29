@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:analyse_gp/domain/models/analysis_result_model.dart';
 import 'package:analyse_gp/network/api/key.dart';
 import 'package:analyse_gp/presentation/widget/check_button.dart';
-import 'package:analyse_gp/presentation/widget/check_malicious.dart';
-import 'package:analyse_gp/presentation/widget/check_status.dart';
-import 'package:analyse_gp/presentation/widget/ckeck_card.dart';
+import 'package:analyse_gp/presentation/widget/analysis_result/analysis_malicious_card.dart';
+import 'package:analyse_gp/presentation/widget/analysis_result/analysis_status_card.dart';
+import 'package:analyse_gp/presentation/widget/analysis_result/analysis_engine_card.dart';
 import 'package:analyse_gp/presentation/widget/gradient_container.dart';
 import 'package:analyse_gp/utils/colors.dart';
 import 'package:analyse_gp/utils/config.dart';
@@ -182,64 +182,66 @@ class _HomeScreenState extends State<HomeScreen> {
       // app bar
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80.0),
-        child: GradientContainer(
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      KorangeLogo,
-                      width: 40,
-                      height: 40,
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          APP_NAME.toUpperCase(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: appSectionBackground,
-                            fontWeight: FontWeight.w700,
+        child: SafeArea(
+          child: GradientContainer(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        KorangeLogo,
+                        width: 40,
+                        height: 40,
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            APP_NAME.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: appSectionBackground,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: const [
-                            Text(
-                              Kby,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: appSectionBackground,
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: const [
+                              Text(
+                                Kby,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: appSectionBackground,
+                                ),
                               ),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              KorangeCyber,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: appOrangeColor,
+                              SizedBox(width: 4),
+                              Text(
+                                KorangeCyber,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: appOrangeColor,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            colors: KappBarGradientColor,
           ),
-          colors: KappBarGradientColor,
         ),
       ),
       // body
@@ -316,6 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
+              // analysis result
               Column(
                 children: _result.map((item) {
                   final analysisStatus = item.analysisStatus;
@@ -334,25 +337,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Analysis Status: $analysisStatus',
-                        style: TextStyle(
-                          color: analysisStatus.startsWith('Error')
-                              ? Colors.red
-                              : Colors.black,
-                        ),
-                      ),
-                      Text(
-                        'Malicious Status: $maliciousStatus/90',
-                        style: TextStyle(
-                          color: analysisStatus.startsWith('Error')
-                              ? Colors.red
-                              : Colors.black,
-                        ),
+                      CheckStatus(analysisStatus: analysisStatus),
+                      const SizedBox(height: 5),
+                      CheckMalicious(
+                        maliciousStatus: maliciousStatus.toString(),
                       ),
                       const SizedBox(height: 20),
                       const Text(
-                        "Résultats d'analyse des fournisseurs de sécurité",
+                        KresultText,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -365,53 +357,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 }).toList(),
               ),
-              // results analyses
-              // SizedBox(
-              //   child: Column(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       // maliciousStatus & analysisStatus
-              //       Column(
-              //         mainAxisAlignment: MainAxisAlignment.start,
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: const [
-              //           CheckMalicious(maliciousStatus: '0'),
-              //           SizedBox(height: 10),
-              //           CheckStatus(analysisStatus: 'Bonne'),
-              //         ],
-              //       ),
-              //       const SizedBox(height: 10),
-              //       const Text(KresultText),
-              //       // engineName & engineResult
-              //       const SizedBox(height: 10),
-              //       const CheckCard(
-              //         engineName: 'Abusix',
-              //         engineResult: 'Clean',
-              //       ),
-              //       const SizedBox(height: 5),
-              //       const CheckCard(
-              //         engineName: 'Abusix',
-              //         engineResult: 'Clean',
-              //       ),
-              //       const SizedBox(height: 5),
-              //       const CheckCard(
-              //         engineName: 'Abusix',
-              //         engineResult: 'Clean',
-              //       ),
-              //       const SizedBox(height: 5),
-              //       const CheckCard(
-              //         engineName: 'Abusix',
-              //         engineResult: 'Clean',
-              //       ),
-              //       const SizedBox(height: 5),
-              //       const CheckCard(
-              //         engineName: 'Abusix',
-              //         engineResult: 'Clean',
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
           ),
         ),

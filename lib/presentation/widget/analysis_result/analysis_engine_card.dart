@@ -14,10 +14,10 @@ class CheckCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
         color: appOrangeColor.withOpacity(0.7),
-        border: Border.all(color: const Color.fromARGB(255, 207, 198, 198)),
+        border: Border.all(color: appLayoutBackground),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,6 +28,7 @@ class CheckCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
+              color: appBlackColor,
             ),
           ),
           Row(
@@ -37,6 +38,7 @@ class CheckCard extends StatelessWidget {
               const Icon(
                 Icons.check_circle_outline,
                 color: kCheckIconColor,
+                size: 30,
               ),
               const SizedBox(width: 5),
               Text(
@@ -44,6 +46,7 @@ class CheckCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: appBlackColor,
                 ),
               ),
             ],
